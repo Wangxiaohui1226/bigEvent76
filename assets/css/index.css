@@ -1,0 +1,35 @@
+.textCenter {
+  text-align: center;
+}
+.iconfont {
+  margin-right: 8px;
+}
+.layui-icon {
+  margin-left: 25px;
+  padding-right: 5px;
+}
+.layui-body {
+  overflow: hidden;
+}
+.textavatar {
+  display: inline-block;
+  /* float: right; */
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  background-color: #009688;
+  border-radius: 50%;
+  line-height: 40px;
+  /* display: none; */
+}
+
+.text {
+  font-size: 12px;
+  text-align: center;
+}
+.userInfo {
+  padding: 10px 30px;
+}
+.layui-side .userInfo {
+  border-bottom: 1px solid #000;
+}
