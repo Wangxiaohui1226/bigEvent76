@@ -33,3 +33,8 @@
 .layui-side .userInfo {
   border-bottom: 1px solid #000;
 }
+
+iframe {
+  background-color: rgb(242, 243, 245);
+  /* padding: 15px; */
+}

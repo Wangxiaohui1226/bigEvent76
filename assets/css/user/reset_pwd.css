@@ -1,0 +1,11 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.layui-card {
+  margin: 15px;
+}
+.layui-card-body {
+  width: 500px;
+}
