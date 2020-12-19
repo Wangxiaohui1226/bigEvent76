@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/lib/layui/css/layui.css" />
+    <link rel="stylesheet" href="/assets/lib/cropper/cropper.css" />
+    <link rel="stylesheet" href="/assets/css/article/art_list.css" />
+  </head>
+  <body>
+    <div class="layui-card">
+      <div class="layui-card-header">文章列表</div>
+      <div class="layui-card-body">
+        <!-- 筛选区 -->
+
+        <form class="layui-form" action="" id="chooseForm">
+          <div class="layui-form-item layui-inline">
+            <select name="city" lay-verify="" class="choosecate">
+              <option value="">所有分类</option>
+            </select>
+          </div>
+
+          <div class="layui-form-item layui-inline">
+            <!-- 右边的下拉框 -->
+            <select name="city" lay-verify="" class="choosestate">
+              <option value="">所有状态</option>
+              <option value="已发布">已发布</option>
+              <option value="草稿">草稿</option>
+            </select>
+          </div>
+
+          <div class="layui-form-item layui-inline">
+            <button class="layui-btn" lay-submit lay-filter="*">筛选</button>
+          </div>
+        </form>
+
+        <!-- 列表区 -->
+        <table class="layui-table">
+          <colgroup>
+            <col />
+            <col width="200" />
+            <col width="200" />
+            <col width="200" />
+            <col width="200" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>文章标题</th>
+              <th>分类</th>
+              <th>发表时间</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="tb"></tbody>
+        </table>
+
+        <!-- 分页区 -->
+        <div id="pagebox"></div>
+      </div>
+    </div>
+
+    <script type="text/html" id="trtpl">
+      {{each data v i}}
+      <tr>
+        <td>{{v.title}}</td>
+        <td>{{v.cate_name}}</td>
+        <td>{{v.pub_date |filterTime}}</td>
+        <td>{{v.state}}</td>
+        <td>
+          <button
+            type="button"
+            class="layui-btn layui-btn-xs editBtn"
+            data-id="{{v.Id}}"
+          >
+            编辑
+          </button>
+          <button
+            type="button"
+            class="layui-btn layui-btn-danger layui-btn-xs delBtn"
+            data-id="{{v.Id}}"
+          >
+            删除
+          </button>
+        </td>
+      </tr>
+
+      {{/each}}
+    </script>
+
+    <!-- 编辑文章模板 -->
+    <script type="text/html" id="editAct">
+      <div class="layui-card">
+        <div class="layui-card-header">修改文章</div>
+        <div class="layui-card-body">
+          <form class="layui-form" action="" id="edform" lay-filter="editform">
+            <div class="layui-form-item layui-hide">
+              <label class="layui-form-label">id</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="Id"
+                  required
+                  lay-verify="required"
+                  autocomplete="off"
+                  class="layui-input"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">文章标题</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="title"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入标题"
+                  autocomplete="off"
+                  class="layui-input"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">文章类别</label>
+              <div class="layui-input-block">
+                <select name="cate_id" lay-verify="required" class="choosecate">
+                  <option value="">请选择文章类别</option>
+                  <!-- <option value="">前端111</option> -->
+
+                  <!-- <option value="">前端111</option>
+                  <option value="" selected>前端1222</option> -->
+                </select>
+              </div>
+            </div>
+
+            <div class="layui-form-item">
+              <!-- 左侧的 label -->
+              <label class="layui-form-label">文章内容</label>
+              <!-- 为富文本编辑器外部的容器设置高度 -->
+              <div class="layui-input-block" style="height: 400px">
+                <!-- 重要：将来这个 textarea 会被初始化为富文本编辑器 -->
+                <textarea name="content"></textarea>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <!-- 左侧的 label -->
+              <label class="layui-form-label">文章封面</label>
+              <!-- 选择封面区域 -->
+              <div class="layui-input-block cover-box">
+                <!-- 左侧裁剪区域 -->
+                <div class="cover-left">
+                  <img id="image" src="/assets/images/sample2.jpg" alt="" />
+                </div>
+                <!-- 右侧预览区域和选择封面区域 -->
+                <div class="cover-right">
+                  <!-- 预览的区域 -->
+                  <div class="img-preview"></div>
+                  <!-- 选择封面按钮 -->
+                  <input type="file" class="layui-hide" id="file" />
+                  <button
+                    type="button"
+                    class="layui-btn layui-btn-danger"
+                    id="chooseimg"
+                  >
+                    选择封面
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                <button
+                  class="layui-btn"
+                  lay-submit
+                  lay-filter="formDemo"
+                  id="btn1"
+                >
+                  发布
+                </button>
+                <button
+                  class="layui-btn layui-btn-primary"
+                  lay-submit
+                  lay-filter="formDemo"
+                  id="btn2"
+                >
+                  存为草稿
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </script>
+
+    <script src="/assets/lib/layui/layui.all.js"></script>
+    <script src="/assets/lib/jquery.js"></script>
+    <script src="/assets/js/ajaxConfig.js"></script>
+    <script src="/assets/lib/template-web.js"></script>
+
+    <!-- 富文本 -->
+    <script src="/assets/lib/tinymce/tinymce.min.js"></script>
+    <script src="/assets/lib/tinymce/tinymce_setup.js"></script>
+    <!-- 图片裁切 -->
+    <script src="/assets/lib/cropper/Cropper.js"></script>
+    <script src="/assets/lib/cropper/jquery-cropper.js"></script>
+    <script src="/assets/js/article/art_list.js"></script>
+  </body>
+</html>
